@@ -33,5 +33,3 @@ public class ChatMessage implements Serializable {
 		return message;
 	}
 }
-
-sdsfaddffadsfadfads
