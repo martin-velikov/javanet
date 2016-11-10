@@ -34,3 +34,4 @@ public class ChatMessage implements Serializable {
 	}
 }
 
+sdsfaddffadsfadfads
