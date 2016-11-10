@@ -29,7 +29,7 @@ public class ChatMessage implements Serializable {
 	int getType() {
 		return type;
 	}
-	int getMessage() {
+	String getMessage() {
 		return message;
 	}
 }
