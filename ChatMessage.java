@@ -29,9 +29,8 @@ public class ChatMessage implements Serializable {
 	int getType() {
 		return type;
 	}
-	String getMessage() {
+	int getMessage() {
 		return message;
 	}
 }
 
-sdgfadsfadsfasfasfads
