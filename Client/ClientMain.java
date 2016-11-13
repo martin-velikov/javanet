@@ -1,8 +1,5 @@
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.io.*;
 import java.util.Scanner;
 
 public class ClientMain {
@@ -10,10 +7,12 @@ public class ClientMain {
     private static InetAddress host;
     private static final int PORT = 9876;
     private static Socket socket = null;
+    private static ObjectOutputStream oos;
+    private static ObjectInputStream ois;
 
     public static void main(String[] args) {
         try{
-            host = InetAddress.getLocalHost();
+            host = InetAddress.getByName("192.168.0.108");
         }catch (UnknownHostException uhe){
             System.out.println("\nUnable to find host ID");
             System.exit(1);
@@ -21,24 +20,26 @@ public class ClientMain {
 
         try{
             socket = new Socket(host, PORT);
-            Scanner input = new Scanner(socket.getInputStream());
-            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+
             Scanner userInput = new Scanner(System.in);
 
-            String message ="", response = "";
+            String message ="";
 
             do{
                 System.out.println("\nEnter message ('QUIT' to exit!): ");
                 message = userInput.nextLine();
-                output.println(message);
-                response = input.nextLine();
-                System.out.println("SERVER> " + response);
-            }while(!message.equals("QUIT"));
-
-            input.close();
+                TestObject obj = new TestObject(message);
+                oos.writeObject(obj);
+                TestObject received = (TestObject) ois.readObject();
+                System.out.println(received.message);
+            }
+            while(!message.equals("QUIT"));
             userInput.close();
-        }catch (IOException ioe){
-            ioe.printStackTrace();
+
+        }catch (Exception e){
+            e.printStackTrace();
         }finally {
             try{
                 System.out.println("\nClosing connection!");
@@ -50,3 +51,4 @@ public class ClientMain {
         }
     }
 }
+
