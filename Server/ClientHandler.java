@@ -25,6 +25,7 @@ public class ClientHandler extends Thread{
 
            while (!to.message.equals("QUIT")) {
                System.out.println(to.message);
+               System.out.println(to.recipient);
                oos.writeObject(to);
                to = (TestObject) ois.readObject();
            }
