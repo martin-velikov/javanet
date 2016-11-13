@@ -26,11 +26,14 @@ public class ClientMain {
             Scanner userInput = new Scanner(System.in);
 
             String message ="";
+            int rec;
 
             do{
+                System.out.println("\nEnter recipient: ");
+                rec = Integer.parseInt(userInput.nextLine());
                 System.out.println("\nEnter message ('QUIT' to exit!): ");
                 message = userInput.nextLine();
-                TestObject obj = new TestObject(message);
+                TestObject obj = new TestObject(message, rec);
                 oos.writeObject(obj);
                 TestObject received = (TestObject) ois.readObject();
                 System.out.println(received.message);
