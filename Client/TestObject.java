@@ -1,11 +1,12 @@
 import java.io.Serializable;
 
-public class TestObject implements Serializable{
-    String recipient;
+class TestObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+  //  String recipient;
     String message;
 
-    public TestObject(String recipient, String message){
-        this.recipient = recipient;
+    public TestObject(String message){
+    //    this.recipient = recipient;
         this.message = message;
     }
 }
