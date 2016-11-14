@@ -10,6 +10,7 @@ public class ClientMain {
     private static ObjectOutputStream oos;
     private static ObjectInputStream ois;
 
+
     public static void main(String[] args) {
         try{
             host = InetAddress.getByName("192.168.0.108");
@@ -25,15 +26,23 @@ public class ClientMain {
 
             Scanner userInput = new Scanner(System.in);
 
-            String message ="";
-            int rec;
+            String message;
+            String username;
+
+            System.out.println(ois.readObject()); //Please enter your username:
+            username = userInput.nextLine();
+            oos.writeObject(username);
+
+            System.out.println(ois.readObject()); //Active users:
+
+            System.out.println(ois.readObject()); // Who do you want to chat with ?
+            username = userInput.nextLine();
+            oos.writeObject(username);
 
             do{
-                System.out.println("\nEnter recipient: ");
-                rec = Integer.parseInt(userInput.nextLine());
                 System.out.println("\nEnter message ('QUIT' to exit!): ");
                 message = userInput.nextLine();
-                TestObject obj = new TestObject(message, rec);
+                TestObject obj = new TestObject(message, username);
                 oos.writeObject(obj);
                 TestObject received = (TestObject) ois.readObject();
                 System.out.println(received.message);
@@ -43,7 +52,8 @@ public class ClientMain {
 
         }catch (Exception e){
             e.printStackTrace();
-        }finally {
+        }
+        finally {
             try{
                 System.out.println("\nClosing connection!");
                 socket.close();
