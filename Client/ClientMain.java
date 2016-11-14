@@ -1,5 +1,9 @@
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientMain {
@@ -7,9 +11,6 @@ public class ClientMain {
     private static InetAddress host;
     private static final int PORT = 9876;
     private static Socket socket = null;
-    private static ObjectOutputStream oos;
-    private static ObjectInputStream ois;
-
 
     public static void main(String[] args) {
         try{
@@ -21,8 +22,8 @@ public class ClientMain {
 
         try{
             socket = new Socket(host, PORT);
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
             Scanner userInput = new Scanner(System.in);
 
