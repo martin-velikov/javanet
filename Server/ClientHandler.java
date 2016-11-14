@@ -8,27 +8,23 @@ public class ClientHandler extends Thread{
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    public ClientHandler (Socket socket){
-        this.socket = socket;
+    public String chatWith;
 
-        try {
-            ois = new ObjectInputStream(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-        }catch (IOException ioe){
-            ioe.printStackTrace();
-        }
+    public ClientHandler (Socket socket, ObjectInputStream ois, ObjectOutputStream oos){
+        this.socket = socket;
+        this.ois = ois;
+        this.oos = oos;
     }
 
     public void run() {
         try {
-           TestObject to = (TestObject) ois.readObject();
+            TestObject to;
 
-           while (!to.message.equals("QUIT")) {
-               System.out.println(to.message);
-               System.out.println(to.recipient);
-               oos.writeObject(to);
-               to = (TestObject) ois.readObject();
-           }
+            do{
+                to = (TestObject) ois.readObject();
+                ServerMain.SendObject(to, chatWith);
+            }while (!to.message.equals("QUIT"));
+
         }catch (Exception Ex){
             Ex.printStackTrace();
         }
@@ -40,6 +36,14 @@ public class ClientHandler extends Thread{
             }
         }catch (IOException ioe){
             System.out.println("\nUnable to disconnect!");
+        }
+    }
+
+    public void SendObject(TestObject testObj){
+        try{
+            oos.writeObject(testObj);
+        }catch (IOException ioEx){
+            ioEx.printStackTrace();
         }
     }
 }

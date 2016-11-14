@@ -13,7 +13,7 @@ public class ClientMain {
 
     public static void main(String[] args) {
         try{
-            host = InetAddress.getByName("192.168.0.108");
+            host = InetAddress.getLocalHost();
         }catch (UnknownHostException uhe){
             System.out.println("\nUnable to find host ID");
             System.exit(1);
@@ -26,28 +26,32 @@ public class ClientMain {
 
             Scanner userInput = new Scanner(System.in);
 
-            String message;
-            String username;
-
             System.out.println(ois.readObject()); //Please enter your username:
-            username = userInput.nextLine();
+            final String username = userInput.nextLine();
             oos.writeObject(username);
 
-            System.out.println(ois.readObject()); //Active users:
+            String response;
+            do {
+                System.out.println(ois.readObject()); //Active users:
+                System.out.println(ois.readObject()); // Who do you want to chat with ?
+                String recipient = userInput.nextLine();
+                oos.writeObject(recipient);
+                response = (String) ois.readObject();
+            }while(!response.equals("OK"));
 
-            System.out.println(ois.readObject()); // Who do you want to chat with ?
-            username = userInput.nextLine();
-            oos.writeObject(username);
-
+           String message;
             do{
                 System.out.println("\nEnter message ('QUIT' to exit!): ");
                 message = userInput.nextLine();
                 TestObject obj = new TestObject(message, username);
                 oos.writeObject(obj);
                 TestObject received = (TestObject) ois.readObject();
-                System.out.println(received.message);
-            }
-            while(!message.equals("QUIT"));
+                if(!received.username.equals(obj.username)) {
+                    String output = received.username + ": " + received.message;
+                    System.out.println(output);
+                }
+            }while(!message.equals("QUIT"));
+
             userInput.close();
 
         }catch (Exception e){
