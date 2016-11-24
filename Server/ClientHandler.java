@@ -1,83 +1,63 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class ClientHandler extends Thread{
     private Socket socket;
     public ObjectInputStream ois;
     public ObjectOutputStream oos;
 
-    private static String username;
-    private static String chatWith;
-
     public ClientHandler (Socket socket){
         this.socket = socket;
         try{
-            ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
         }catch (IOException ioEx){
             ioEx.printStackTrace();
         }
     }
 
     public void run() {
+        LoginData loginData = null;
+
         try {
-            oos.writeObject("SERVER> Please enter your username: ");
-            username = (String) ois.readObject();
-            System.out.println(username + " connected!\n");
-
-            ServerMain.clients.put(username, this);
-
             String response = "";
             do {
-                String activeUsers = "";
-                for(String key : ServerMain.clients.keySet()){
-                    activeUsers += key + " ";
-                }
-
-                oos.writeObject("\nSERVER> Active users: " + activeUsers + "\n");
-                oos.writeObject("SERVER> Who you want to chat with ?\n");
-
-                chatWith = (String) ois.readObject();
-
-                for (HashMap.Entry<String, ClientHandler> entry : ServerMain.clients.entrySet()) {
-                    if (chatWith.equals(entry.getKey())) {
-                        response = "OK";
-                    }
-                }
+                loginData = (LoginData) ois.readObject();
+//                if(loginData.username.equals("lqlq")){
+//                    response = "OK";
+//                }
+                response = "OK"; //==============TEST=============//
                 oos.writeObject(response);
-            }while (!response.equals("OK"));
+            }while(!response.equals("OK"));
+            System.out.println(loginData.username + " connected!\n");
 
+            ServerMain.clients.put(loginData.username, this);
 
-            TestObject testObj;
-            do{
-                testObj = (TestObject) ois.readObject();
-                SendObject(testObj);
-            }while (!testObj.message.equals("QUIT"));
+            ArrayList<String> clients = new ArrayList<String>();
+            for(String name : ServerMain.clients.keySet()){
+                clients.add(name);
+            }
+            oos.writeObject(clients);
 
-        }catch (Exception Ex){
-            Ex.printStackTrace();
+            while(true){
+                String message = loginData.username + ": " + ois.readObject();
+
+                for(ClientHandler clientHandler : ServerMain.clients.values()){
+                    clientHandler.oos.writeObject(message);
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         try{
             if(socket != null){
-                System.out.println("\nClosing down connection!");
-                ServerMain.clients.remove(username, this);
+                System.out.println("\n" + loginData.username + " disconnected!\n");
+                ServerMain.clients.remove(loginData.username, this);
                 socket.close();
             }
-        }catch (IOException ioe){
-            System.out.println("\nUnable to disconnect!");
-        }
-    }
-
-    private static void SendObject(TestObject testObj){
-        try {
-            if (!testObj.username.equals(chatWith)) {
-                ServerMain.clients.get(testObj.username).oos.writeObject(testObj);
-            }
-            ServerMain.clients.get(chatWith).oos.writeObject(testObj);
         }catch (IOException ioEx){
             ioEx.printStackTrace();
         }
