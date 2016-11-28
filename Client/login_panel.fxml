@@ -23,6 +23,6 @@
       <Label layoutX="76.0" layoutY="151.0" text="Username" />
       <Label layoutX="76.0" layoutY="210.0" text="Password" />
       <Button fx:id="loginButton" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" text="Log in" />
-      <Hyperlink layoutX="125.0" layoutY="334.0" text="Register" />
+      <Hyperlink fx:id="registerButton" layoutX="125.0" layoutY="334.0" text="Register" />
    </children>
 </AnchorPane>

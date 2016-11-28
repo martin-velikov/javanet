@@ -6,10 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -22,6 +24,8 @@ public class Login extends Thread implements Initializable{
     private PasswordField password;
     @FXML
     private Button loginButton;
+    @FXML
+    private Hyperlink registerButton;
 
     private String response = "";
 
@@ -45,12 +49,15 @@ public class Login extends Thread implements Initializable{
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    LoginData loginData = new LoginData(username.getText(), password.getText());
-                    Main.oos.writeObject(loginData);
+                    ObjLoginData objLoginData = new ObjLoginData(username.getText(), password.getText());
+                    Main.oos.writeObject(objLoginData);
 
                     Thread.sleep(100);  //Waiting for answer from server
                     if(response.equals("OK")) {
-                        Parent root = FXMLLoader.load(getClass().getResource("chatFrame.fxml"));
+                        Main.myUsername = username.getText();
+
+                        Parent root = FXMLLoader.load(getClass().getResource("chat_frame.fxml"));
+
                         Stage stage = new Stage();
                         stage.setTitle("Group chat");
                         stage.setScene(new Scene(root));
@@ -58,8 +65,26 @@ public class Login extends Thread implements Initializable{
                         prevStage.close();
 
                         stage.show();
+                    }else{
+                        // ERROR MESSAGE
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                event.consume();
+            }
+        });
+
+        registerButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("registration_panel.fxml"));
+                    Stage stage = new Stage();
+                    stage.setTitle("Group chat");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 event.consume();

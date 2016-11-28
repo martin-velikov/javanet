@@ -17,6 +17,8 @@ public class Main extends Application {
     public static ObjectInputStream ois;
     public static ObjectOutputStream oos;
 
+    public static String myUsername;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         host = InetAddress.getLocalHost();
@@ -24,7 +26,7 @@ public class Main extends Application {
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
 
-        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("loginPanel.fxml"));
+        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_panel.fxml"));
         Parent root = myLoader.load();
 
         Login controller = myLoader.getController();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="84.0" layoutY="26.0" text="Simple Chat ™">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="102.0" layoutY="61.0" text="Registration">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField layoutX="15.0" layoutY="129.0" prefHeight="25.0" prefWidth="127.0" />
+      <TextField layoutX="159.0" layoutY="129.0" prefHeight="25.0" prefWidth="127.0" />
+      <Label layoutX="15.0" layoutY="108.0" text="First Name" />
+      <Label layoutX="159.0" layoutY="108.0" text="Last Name" />
+      <TextField layoutX="15.0" layoutY="186.0" prefHeight="25.0" prefWidth="270.0" />
+      <Label layoutX="15.0" layoutY="166.0" text="Email" />
+      <TextField layoutX="76.0" layoutY="254.0" />
+      <Label layoutX="76.0" layoutY="235.0" text="Username" />
+      <Label layoutX="76.0" layoutY="289.0" text="Password" />
+      <Label layoutX="25.0" layoutY="412.0" text="Successful registration! You can sign in now." textFill="#119e34" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="22.0" layoutY="412.0" text="This email is already registered in the system!" textFill="#ff3328" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="10.0" layoutY="412.0" text="This username is already registered in the system!" textFill="#ff3328" visible="false">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <PasswordField layoutX="76.0" layoutY="308.0" />
+      <Button layoutX="120.0" layoutY="357.0" mnemonicParsing="false" text="Register" />
+   </children>
+</AnchorPane>
