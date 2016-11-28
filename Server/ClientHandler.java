@@ -7,6 +7,8 @@ public class ClientHandler extends Thread{
     public ObjectInputStream ois;
     public ObjectOutputStream oos;
 
+    private String myUsername = null;
+
     public ClientHandler (Socket socket){
         this.socket = socket;
         try{
@@ -18,48 +20,87 @@ public class ClientHandler extends Thread{
     }
 
     public void run() {
-        LoginData loginData = null;
-
         try {
-            String response = "";
-            do {
-                loginData = (LoginData) ois.readObject();
-//                if(loginData.username.equals("lqlq")){
-//                    response = "OK";
-//                }
-                response = "OK"; //==============TEST=============//
-                oos.writeObject(response);
-            }while(!response.equals("OK"));
-            System.out.println(loginData.username + " connected!\n");
-
-            ServerMain.clients.put(loginData.username, this);
-
-            ArrayList<String> clients = new ArrayList<String>();
-            for(String name : ServerMain.clients.keySet()){
-                clients.add(name);
-            }
-            oos.writeObject(clients);
-
             while(true){
-                String message = loginData.username + ": " + ois.readObject();
+                Object receivedObject = ois.readObject();
 
-                for(ClientHandler clientHandler : ServerMain.clients.values()){
-                    clientHandler.oos.writeObject(message);
+                if(receivedObject.getClass() == ObjLoginData.class){
+                    LoginDataReceived((ObjLoginData)receivedObject);
+                }
+                else if(receivedObject.getClass() == ObjGroupChatMessage.class){
+                    GroupChatMessageReceived((ObjGroupChatMessage)receivedObject);
+                }
+                else if(receivedObject.getClass() == ObjOpenPrivateChat.class){
+                    OpenPrivateChatReceived((ObjOpenPrivateChat)receivedObject);
+                }
+                else if(receivedObject.getClass() == ObjPrivateChatMessage.class){
+                    PrivateChatMessageReceived((ObjPrivateChatMessage)receivedObject);
                 }
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
 
         try{
             if(socket != null){
-                System.out.println("\n" + loginData.username + " disconnected!\n");
-                ServerMain.clients.remove(loginData.username, this);
+                System.out.println("\n" + myUsername + " disconnected!\n");
+                ServerMain.clients.remove(myUsername);
+                RefreshClients();
                 socket.close();
             }
         }catch (IOException ioEx){
             ioEx.printStackTrace();
+        }
+    }
+
+    private void PrivateChatMessageReceived(ObjPrivateChatMessage objPrivateChatMessage) throws IOException{
+        ObjPrivateChatMessage receiver = new ObjPrivateChatMessage(myUsername, objPrivateChatMessage.message);
+        ServerMain.clients.get(objPrivateChatMessage.otherUser).oos.writeObject(receiver);
+    }
+
+    private void LoginDataReceived(ObjLoginData objLoginData) throws IOException {
+        String response = "";
+        // CHECk IN DATABASE
+        // IF USERNAME/PASSWORD COMBINATION OK - RESPONSE("OK")
+        // ELSE ERROR MESSAGE
+        if(true) {
+            System.out.println(objLoginData.username + " connected!\n");
+            ServerMain.clients.put(objLoginData.username, this);
+            response = "OK";
+            myUsername = objLoginData.username;
+            oos.writeObject(response);
+            RefreshClients();
+        }
+        else{
+            oos.writeObject(response);
+        }
+    }
+
+    private void GroupChatMessageReceived(ObjGroupChatMessage objGroupChatMessage) throws IOException{
+        String message = myUsername + ": " + objGroupChatMessage.message;
+        ObjGroupChatMessage newMessage = new ObjGroupChatMessage(message);
+
+        for(ClientHandler clientHandler : ServerMain.clients.values()) {
+            clientHandler.oos.writeObject(newMessage);
+        }
+    }
+
+    private void RefreshClients() throws IOException{
+        ArrayList<String> clients = new ArrayList<String>();
+        for(String name : ServerMain.clients.keySet()){
+            clients.add(name);
+        }
+        for(ClientHandler clientHandler : ServerMain.clients.values()) {
+            clientHandler.oos.writeObject(clients);
+        }
+    }
+
+    private void OpenPrivateChatReceived(ObjOpenPrivateChat objOpenPrivateChat) throws IOException{
+        for(String name : ServerMain.clients.keySet()){
+            if(name.equals(objOpenPrivateChat.chatWith)){
+                ObjOpenPrivateChat sender = new ObjOpenPrivateChat(myUsername);
+                ServerMain.clients.get(name).oos.writeObject(sender);
+            }
         }
     }
 }
