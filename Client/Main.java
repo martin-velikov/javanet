@@ -11,13 +11,17 @@ import java.net.Socket;
 
 public class Main extends Application {
 
-    public static InetAddress host;
     public static final int PORT = 9876;
+    public static InetAddress host;
     public static Socket socket = null;
     public static ObjectInputStream ois;
     public static ObjectOutputStream oos;
 
     public static String myUsername;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -33,11 +37,8 @@ public class Main extends Application {
         controller.setPrevStage(primaryStage);
 
         primaryStage.setTitle("Login");
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

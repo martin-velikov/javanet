@@ -5,7 +5,7 @@ class ObjLoginData implements Serializable {
     String username;
     String password;
 
-    public ObjLoginData(String username, String password){
+    public ObjLoginData(String username, String password) {
         this.username = username;
         this.password = password;
     }
