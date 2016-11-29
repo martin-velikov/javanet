@@ -8,10 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ClientHandler extends Thread {
-    private Socket socket;
     public ObjectInputStream ois;
     public ObjectOutputStream oos;
-
+    private Socket socket;
     private String myUsername = null;
 
     public ClientHandler(Socket socket) {
@@ -44,12 +43,11 @@ public class ClientHandler extends Thread {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(myUsername + " disconnected!\n");
         }
 
         try {
             if (socket != null) {
-                System.out.println("\n" + myUsername + " disconnected!\n");
                 ServerMain.clients.remove(myUsername);
                 RefreshClients();
                 socket.close();
@@ -64,18 +62,14 @@ public class ClientHandler extends Thread {
     }
 
     private void RegisterDatReceived(ObjRegisterData objRegisterData) throws SQLException, IOException {
-        Boolean exists = false;
         String response = "";
 
         Statement selectStmt = ServerMain.connection.createStatement();
-        ResultSet rs = selectStmt.executeQuery("SELECT * FROM users");
-        while (rs.next()) {
-            if (rs.getString("username").equals(objRegisterData.username)) {
-                exists = true;
-                response = "TAKEN";
-            }
+        ResultSet rs = selectStmt.executeQuery("SELECT * FROM users WHERE username = " + objRegisterData.username);
+        if(rs.next()) {
+            response = "TAKEN";
         }
-        if (!exists) {
+        else {
             Statement addStmt = ServerMain.connection.createStatement();
             addStmt.executeUpdate("insert into users(username, pass) values(" + objRegisterData.username + ", " + objRegisterData.password + ")");
             System.out.println("New user registered: " + objRegisterData.username);
