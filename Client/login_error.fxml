@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="88.0" prefWidth="247.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="ErrorController">
+    <children>
+        <Button fx:id="button" layoutX="107.0" layoutY="49.0" mnemonicParsing="false" text="OK"/>
+        <Label fx:id="text" layoutX="21.0" layoutY="14.0" text="Wrong username/password !">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
-
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login">
-   <children>
-      <Label contentDisplay="CENTER" layoutX="102.0" layoutY="60.0" text="Welcome to" textAlignment="CENTER">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="86.0" layoutY="87.0" text="Simple Chat ™">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <TextField fx:id="username" layoutX="76.0" layoutY="175.0" />
-      <PasswordField fx:id="password" layoutX="76.0" layoutY="233.0" />
-      <Label layoutX="76.0" layoutY="151.0" text="Username" />
-      <Label layoutX="76.0" layoutY="210.0" text="Password" />
-      <Button fx:id="loginButton" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" text="Log in" />
-      <Hyperlink fx:id="registerButton" layoutX="125.0" layoutY="334.0" text="Register" />
-   </children>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="Login">
+    <children>
+        <Label contentDisplay="CENTER" layoutX="102.0" layoutY="60.0" text="Welcome to" textAlignment="CENTER">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <Label layoutX="86.0" layoutY="87.0" prefHeight="35.0" prefWidth="150.0" text="SimpleChat™"
+               textAlignment="CENTER">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="username" layoutX="76.0" layoutY="175.0"/>
+        <PasswordField fx:id="password" layoutX="76.0" layoutY="233.0"/>
+        <Label layoutX="76.0" layoutY="151.0" text="Username"/>
+        <Label layoutX="76.0" layoutY="210.0" text="Password"/>
+        <Button fx:id="loginButton" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" text="Log in"/>
+        <Hyperlink fx:id="registerButton" layoutX="125.0" layoutY="334.0" text="Register"/>
+    </children>
 </AnchorPane>
