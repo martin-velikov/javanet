@@ -76,7 +76,7 @@ public class Login extends Thread implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    FXMLLoader myLoader = new FXMLLoader(getClass().getResource("registration_panel.fxml"));
+                    FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/registration_panel.fxml"));
                     Parent root = myLoader.load();
                     register = myLoader.getController();
 
@@ -115,7 +115,7 @@ public class Login extends Thread implements Initializable {
             Main.myUsername = username.getText();
             logged = true;
 
-            Parent root = FXMLLoader.load(getClass().getResource("chat_frame.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("fxml/chat_frame.fxml"));
 
             Stage stage = new Stage();
             stage.setTitle("Group chat");
@@ -129,7 +129,7 @@ public class Login extends Thread implements Initializable {
             username.clear();
             password.clear();
 
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_error.fxml"));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/login_error.fxml"));
             Parent root = myLoader.load();
             ErrorController controller = myLoader.getController();
             controller.text.setText("User already logged in !");
@@ -141,7 +141,7 @@ public class Login extends Thread implements Initializable {
 
             stage.show();
         } else if (response.equals("REG_OK")) {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_error.fxml"));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/login_error.fxml"));
             Parent root = myLoader.load();
             ErrorController controller = myLoader.getController();
             controller.text.setText("Registration successful !");
@@ -156,7 +156,7 @@ public class Login extends Thread implements Initializable {
             Stage prevStage = (Stage) register.button.getScene().getWindow();
             prevStage.close();
         } else if (response.equals("TAKEN")) {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_error.fxml"));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/login_error.fxml"));
             Parent root = myLoader.load();
             ErrorController controller = myLoader.getController();
             controller.text.setText("Username already registered !");
@@ -171,7 +171,7 @@ public class Login extends Thread implements Initializable {
             username.clear();
             password.clear();
 
-            Parent root = FXMLLoader.load(getClass().getResource("login_error.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("fxml/login_error.fxml"));
 
             Stage stage = new Stage();
             stage.setTitle("ERROR");

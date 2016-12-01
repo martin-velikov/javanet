@@ -35,7 +35,7 @@ public class Register implements Initializable {
                         ObjRegisterData objRegisterData = new ObjRegisterData(username.getText(), pass1.getText());
                         Main.oos.writeObject(objRegisterData);
                     } else {
-                        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_error.fxml"));
+                        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/login_error.fxml"));
                         Parent root = myLoader.load();
                         ErrorController controller = myLoader.getController();
                         controller.text.setText("Incorrect data input !");

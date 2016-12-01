@@ -60,7 +60,7 @@ public class MainChat extends Thread implements Initializable {
                             String chatWith = ((ObjOpenPrivateChat) receivedObject).chatWith;
                             if (!privateChats.containsKey(chatWith)) {
                                 try {
-                                    FXMLLoader myFxmlLoader = new FXMLLoader(getClass().getResource("private_chat.fxml"));
+                                    FXMLLoader myFxmlLoader = new FXMLLoader(getClass().getResource("fxml/private_chat.fxml"));
                                     Parent root = myFxmlLoader.load();
                                     PrivateChat controller = myFxmlLoader.getController();
                                     controller.setChatWith(chatWith);
@@ -144,7 +144,7 @@ public class MainChat extends Thread implements Initializable {
                             ObjOpenPrivateChat objOpenPrivateChat = new ObjOpenPrivateChat(clientList.getSelectionModel().getSelectedItem().toString());
                             Main.oos.writeObject(objOpenPrivateChat);
 
-                            FXMLLoader myFxmlLoader = new FXMLLoader(getClass().getResource("private_chat.fxml"));
+                            FXMLLoader myFxmlLoader = new FXMLLoader(getClass().getResource("fxml/private_chat.fxml"));
                             Parent root = myFxmlLoader.load();
 
                             PrivateChat controller = myFxmlLoader.getController();

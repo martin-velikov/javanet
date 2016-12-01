@@ -4,14 +4,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ClientHandler extends Thread {
-    private Socket socket;
     public ObjectInputStream ois;
     public ObjectOutputStream oos;
-
+    private Socket socket;
     private String myUsername = null;
 
     public ClientHandler(Socket socket) {
@@ -44,12 +42,11 @@ public class ClientHandler extends Thread {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(myUsername + " disconnected!\n");
         }
 
         try {
             if (socket != null) {
-                System.out.println("\n" + myUsername + " disconnected!\n");
                 ServerMain.clients.remove(myUsername);
                 RefreshClients();
                 socket.close();
@@ -64,20 +61,13 @@ public class ClientHandler extends Thread {
     }
 
     private void RegisterDatReceived(ObjRegisterData objRegisterData) throws SQLException, IOException {
-        Boolean exists = false;
         String response = "";
 
-        Statement selectStmt = ServerMain.connection.createStatement();
-        ResultSet rs = selectStmt.executeQuery("SELECT * FROM users");
-        while (rs.next()) {
-            if (rs.getString("username").equals(objRegisterData.username)) {
-                exists = true;
-                response = "TAKEN";
-            }
-        }
-        if (!exists) {
-            Statement addStmt = ServerMain.connection.createStatement();
-            addStmt.executeUpdate("insert into users(username, pass) values(" + objRegisterData.username + ", " + objRegisterData.password + ")");
+        ResultSet rs = ServerMain.connection.createStatement().executeQuery("SELECT * FROM users WHERE username = '" + objRegisterData.username + "'");
+        if (rs.next()) {
+            response = "TAKEN";
+        } else {
+            ServerMain.connection.createStatement().executeUpdate("insert into users(username, pass) values('" + objRegisterData.username + "', '" + objRegisterData.password + "')");
             System.out.println("New user registered: " + objRegisterData.username);
             response = "REG_OK";
         }
@@ -93,27 +83,20 @@ public class ClientHandler extends Thread {
         String response = "";
         Boolean exists = false;
 
-        Statement selectStmt = ServerMain.connection.createStatement();
-        ResultSet rs = selectStmt.executeQuery("SELECT * FROM users");
-        while (rs.next()) {
-            if (rs.getString("username").equals(objLoginData.username) &&
-                    rs.getString("pass").equals(objLoginData.password) &&
-                    !ServerMain.clients.containsKey(objLoginData.username)) {
+        ResultSet rs = ServerMain.connection.createStatement().executeQuery("SELECT * FROM users WHERE username = '" + objLoginData.username + "' AND pass = '" + objLoginData.password + "'");
+        if (rs.next()) {
+            if (!ServerMain.clients.containsKey(objLoginData.username)) {
                 System.out.println(objLoginData.username + " connected!\n");
                 ServerMain.clients.put(objLoginData.username, this);
                 response = "LOG_OK";
-                exists = true;
                 myUsername = objLoginData.username;
                 oos.writeObject(response);
                 RefreshClients();
-                break;
-            } else if (rs.getString("username").equals(objLoginData.username) &&
-                    rs.getString("pass").equals(objLoginData.password) &&
-                    ServerMain.clients.containsKey(objLoginData.username)) {
+            } else {
                 response = "LOGGED";
+                oos.writeObject(response);
             }
-        }
-        if (!exists) {
+        } else {
             oos.writeObject(response);
         }
     }

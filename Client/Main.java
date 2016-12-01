@@ -30,7 +30,7 @@ public class Main extends Application {
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
 
-        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("login_panel.fxml"));
+        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("fxml/login_panel.fxml"));
         Parent root = myLoader.load();
 
         Login controller = myLoader.getController();
